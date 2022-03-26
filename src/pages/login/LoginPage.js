@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
 import {auth} from './../../libs/firebase'
 import styled from 'styled-components';
 
 import { Label } from "../../ui/forms";
 import { Input } from "../../ui/forms";
-import { Button, SubmitButton } from "../../ui/buttons";
+import { SubmitButton } from "../../ui/buttons";
 
 const LoginPageStyles = styled.section`
     max-width: 400px;
@@ -23,7 +23,10 @@ const FormControl= styled.div`
 function LoginPage(props){
     let navigation = useNavigate(); 
 
-    function onHandelSubmit(e){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    function onHandelSignIn(e){
         e.preventDefault();
 
         navigation('dashboard')
@@ -35,21 +38,21 @@ function LoginPage(props){
                 <h1>Welcome!</h1>
                 <h2>Please Login</h2>
             </header>
-            <body>
+            <form onSubmit={onHandelSignIn}>
                 <FormControl>
                     <Label>Email</Label>
-                    <Input type="email" placeholder="email@mail.com" required></Input>
+                    <Input type="email" placeholder="email@mail.com" onChange={(e)=> setEmail(e.target.value)} required></Input>
                 </FormControl>
 
                 <FormControl>
                     <Label>Password</Label>
-                    <Input type="password" placeholder="password"></Input>
+                    <Input type="password" placeholder="password" onChange={(e)=> setPassword(e.target.value)} required></Input>
                 </FormControl>
 
                 <FormControl>
                     <SubmitButton padding="0.5rem 0">Sign In!</SubmitButton>
                 </FormControl>
-            </body>
+            </form>
         </LoginPageStyles>
     )
 }
