@@ -1,39 +1,56 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
-import {auth} from './../../libs/firebase'
-import styled from 'styled-components';
+import {signInWithEmailAndPassword} from "firebase/auth"
 
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
+
+import { auth } from './../../libs/firebase'
 import { Label } from "../../ui/forms";
 import { Input } from "../../ui/forms";
 import { SubmitButton } from "../../ui/buttons";
-
-const LoginPageStyles = styled.section`
-    max-width: 400px;
-    margin: 2rem auto;
-    h1{
-        font-size: 2rem;
-    }
-`
-
-const FormControl= styled.div`
-    margin-bottom: 2rem;
-`
+import { LoginPageStyles , FormControl } from "./styles";
 
 
 function LoginPage(props){
     let navigation = useNavigate(); 
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const notify = (error) => toast.error(error.message,{
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+
+
 
     function onHandelSignIn(e){
         e.preventDefault();
 
-        navigation('dashboard')
+        console.log(auth)
+        console.log(email)
+        console.log(password)
+
+        signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential=>{
+            navigator('dashboard')
+        })
+        .catch(error=>{
+            notify(error)
+        })
     }
 
     return(
         <LoginPageStyles>
+            <ToastContainer>
+
+            </ToastContainer>
             <header>
                 <h1>Welcome!</h1>
                 <h2>Please Login</h2>
@@ -41,12 +58,12 @@ function LoginPage(props){
             <form onSubmit={onHandelSignIn}>
                 <FormControl>
                     <Label>Email</Label>
-                    <Input type="email" placeholder="email@mail.com" onChange={(e)=> setEmail(e.target.value)} required></Input>
+                    <Input type="text" placeholder="email@mail.com" onChange={(e)=> setEmail(e.target.value)}></Input>
                 </FormControl>
 
                 <FormControl>
                     <Label>Password</Label>
-                    <Input type="password" placeholder="password" onChange={(e)=> setPassword(e.target.value)} required></Input>
+                    <Input type="text" placeholder="password" onChange={(e)=> setPassword(e.target.value)}></Input>
                 </FormControl>
 
                 <FormControl>
