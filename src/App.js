@@ -1,7 +1,5 @@
 import {Route, Routes} from 'react-router-dom'
 
-import {Button} from "./ui/buttons";
-
 import {DashBoardPage, LoginPage, PageNotFound} from './pages'
 
 
