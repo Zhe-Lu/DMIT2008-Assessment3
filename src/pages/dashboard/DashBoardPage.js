@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 
-import AppBar from "../../components/appbar/AppBar";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "libs/firebase";
+import { Outlet, useNavigate } from "react-router-dom";
+
+import { AppBar } from 'components/appbar';
+import { DashboardPageStyles } from './styles';
+import { Sidebar } from "components/sidebar";
 
 function DashBoardPage(props){
-    return(
-        <>
-        <AppBar></AppBar>
-        <header>
-            <h1>DashBoard</h1>
-        </header>
-        <body>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae aut at sunt voluptate quos eligendi aliquam ea iusto, culpa repudiandae explicabo eveniet rem recusandae vel dolore ipsam ratione harum est?</p>
-        </body>
-        </>
-    )
+    const [isUser, setIsUser] = useState(false);
+    const navigator = useNavigate();
+
+    onAuthStateChanged(auth, (user)=> {
+        if(user){
+            setIsUser(true)
+        } else {
+            setIsUser(false)
+            navigator('/')
+        }
+    })
+
+    if(isUser){
+        return(
+            <>
+            <AppBar/>
+            <DashboardPageStyles>
+                <Sidebar/>
+                <Outlet/>
+            </DashboardPageStyles>
+            </>
+        )
+    } else {
+        return null;
+    }
 }
 
 export default DashBoardPage

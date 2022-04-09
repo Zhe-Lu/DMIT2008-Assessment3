@@ -11,12 +11,11 @@ import { Input } from "../../ui/forms";
 import { SubmitButton } from "../../ui/buttons";
 import { LoginPageStyles , FormControl } from "./styles";
 
-
 function LoginPage(props){
     let navigation = useNavigate(); 
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const notify = (error) => toast.error(error.message,{
         position: "top-center",
@@ -32,10 +31,6 @@ function LoginPage(props){
 
     function onHandelSignIn(e){
         e.preventDefault();
-
-        console.log(auth)
-        console.log(email)
-        console.log(password)
 
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredential=>{
